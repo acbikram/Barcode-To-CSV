@@ -17,11 +17,10 @@ class BarcodeAnalyzer(
             val image = InputImage.fromMediaImage(mediaImage, imageProxy.imageInfo.rotationDegrees)
             scanner.process(image)
                 .addOnSuccessListener { barcodes ->
-                    for (barcode in barcodes) {
-                        barcode.rawValue?.let {
-                            onBarcodeDetected(it)
-                            break
-                        }
+                    // Find first non-null raw value without using break
+                    val barcodeValue = barcodes.firstOrNull { it.rawValue != null }?.rawValue
+                    if (barcodeValue != null) {
+                        onBarcodeDetected(barcodeValue)
                     }
                 }
                 .addOnFailureListener { e -> Log.e("BarcodeAnalyzer", "Scan failed", e) }
