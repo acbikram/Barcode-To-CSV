@@ -12,6 +12,7 @@ import com.example.barcodescanner.ui.adapters.HistoryAdapter
 import com.example.barcodescanner.ui.dialogs.EditRecordDialogFragment
 import com.example.barcodescanner.utils.CsvExporter
 import com.example.barcodescanner.viewmodel.HistoryViewModel
+import kotlinx.coroutines.flow.first
 import kotlinx.coroutines.launch
 
 class HistoryActivity : AppCompatActivity() {
@@ -42,7 +43,13 @@ class HistoryActivity : AppCompatActivity() {
         }
         binding.recyclerViewHistory.layoutManager = LinearLayoutManager(this)
         binding.recyclerViewHistory.adapter = adapter
-        viewModel.allRecords.observe(this) { records -> adapter.submitList(records) }
+
+        // ✅ Collect Flow instead of LiveData observation
+        lifecycleScope.launch {
+            viewModel.allRecords.collect { records ->
+                adapter.submitList(records)
+            }
+        }
 
         binding.buttonExportAll.setOnClickListener {
             lifecycleScope.launch {
