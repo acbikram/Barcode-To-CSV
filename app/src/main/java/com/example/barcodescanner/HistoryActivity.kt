@@ -44,7 +44,6 @@ class HistoryActivity : AppCompatActivity() {
         binding.recyclerViewHistory.layoutManager = LinearLayoutManager(this)
         binding.recyclerViewHistory.adapter = adapter
 
-        // ✅ Collect Flow instead of LiveData observation
         lifecycleScope.launch {
             viewModel.allRecords.collect { records ->
                 adapter.submitList(records)
