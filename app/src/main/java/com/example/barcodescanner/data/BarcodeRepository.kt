@@ -8,4 +8,13 @@ class BarcodeRepository(private val barcodeDao: BarcodeDao) {
     fun getRecentScans(): Flow<List<BarcodeRecord>> = barcodeDao.getRecentScans()
     suspend fun updateRecord(record: BarcodeRecord) = barcodeDao.update(record)
     suspend fun deleteRecord(id: Long) = barcodeDao.deleteById(id)
+
+    // NEW
+    suspend fun findDuplicate(barcode: String, tagType: String, unitType: String): BarcodeRecord? =
+        barcodeDao.findDuplicate(barcode, tagType, unitType)
+
+    suspend fun incrementCopies(record: BarcodeRecord) {
+        record.copies += 1
+        barcodeDao.update(record)
+    }
 }
