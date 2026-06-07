@@ -1,0 +1,25 @@
+<?xml version="1.0" encoding="utf-8"?>
+<ScrollView xmlns:android="http://schemas.android.com/apk/res/android"
+    android:layout_width="match_parent"
+    android:layout_height="wrap_content"
+    android:padding="16dp">
+    <LinearLayout android:layout_width="match_parent" android:layout_height="wrap_content" android:orientation="vertical">
+        <TextView android:layout_width="wrap_content" android:layout_height="wrap_content" android:text="Barcode" android:textAppearance="?attr/textAppearanceLabelMedium"/>
+        <TextView android:id="@+id/textEditBarcode" android:layout_width="match_parent" android:layout_height="wrap_content" android:fontFamily="monospace" android:padding="8dp" android:textAppearance="?attr/textAppearanceBodyLarge"/>
+        <com.google.android.material.textfield.TextInputLayout android:layout_width="match_parent" android:layout_height="wrap_content" android:layout_marginTop="8dp" android:hint="Price (optional)">
+            <com.google.android.material.textfield.TextInputEditText android:id="@+id/editPrice" android:layout_width="match_parent" android:layout_height="wrap_content" android:inputType="numberDecimal"/>
+        </com.google.android.material.textfield.TextInputLayout>
+        <TextView android:layout_width="wrap_content" android:layout_height="wrap_content" android:layout_marginTop="8dp" android:text="Tag Type"/>
+        <Spinner android:id="@+id/spinnerEditTagType" android:layout_width="match_parent" android:layout_height="wrap_content"/>
+        <TextView android:layout_width="wrap_content" android:layout_height="wrap_content" android:layout_marginTop="8dp" android:text="Unit Type"/>
+        <Spinner android:id="@+id/spinnerEditUnitType" android:layout_width="match_parent" android:layout_height="wrap_content"/>
+        <TextView android:layout_width="wrap_content" android:layout_height="wrap_content" android:layout_marginTop="8dp" android:text="Copies"/>
+        <Spinner android:id="@+id/spinnerEditCopies" android:layout_width="match_parent" android:layout_height="wrap_content"/>
+        <com.google.android.material.textfield.TextInputLayout android:layout_width="match_parent" android:layout_height="wrap_content" android:layout_marginTop="8dp" android:hint="Custom English Text">
+            <com.google.android.material.textfield.TextInputEditText android:id="@+id/editCustomEng" android:layout_width="match_parent" android:layout_height="wrap_content"/>
+        </com.google.android.material.textfield.TextInputLayout>
+        <com.google.android.material.textfield.TextInputLayout android:layout_width="match_parent" android:layout_height="wrap_content" android:layout_marginTop="8dp" android:hint="Custom Arabic Text">
+            <com.google.android.material.textfield.TextInputEditText android:id="@+id/editCustomAra" android:layout_width="match_parent" android:layout_height="wrap_content" android:gravity="end"/>
+        </com.google.android.material.textfield.TextInputLayout>
+    </LinearLayout>
+</ScrollView>
