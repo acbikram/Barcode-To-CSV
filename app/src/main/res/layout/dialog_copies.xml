@@ -1,0 +1,15 @@
+<?xml version="1.0" encoding="utf-8"?>
+<LinearLayout xmlns:android="http://schemas.android.com/apk/res/android"
+    android:layout_width="match_parent"
+    android:layout_height="wrap_content"
+    android:orientation="vertical"
+    android:padding="16dp">
+    <TextView android:layout_width="wrap_content" android:layout_height="wrap_content" android:text="How Many Copies?" android:textAppearance="?attr/textAppearanceTitleMedium" android:layout_gravity="center" android:layout_marginBottom="16dp"/>
+    <LinearLayout android:layout_width="match_parent" android:layout_height="wrap_content" android:orientation="horizontal" android:weightSum="5">
+        <Button android:id="@+id/buttonCopy1" android:layout_width="0dp" android:layout_height="48dp" android:layout_weight="1" android:layout_margin="4dp" android:text="1" style="@style/Widget.Material3.Button.OutlinedButton"/>
+        <Button android:id="@+id/buttonCopy2" android:layout_width="0dp" android:layout_height="48dp" android:layout_weight="1" android:layout_margin="4dp" android:text="2" style="@style/Widget.Material3.Button.OutlinedButton"/>
+        <Button android:id="@+id/buttonCopy3" android:layout_width="0dp" android:layout_height="48dp" android:layout_weight="1" android:layout_margin="4dp" android:text="3" style="@style/Widget.Material3.Button.OutlinedButton"/>
+        <Button android:id="@+id/buttonCopy4" android:layout_width="0dp" android:layout_height="48dp" android:layout_weight="1" android:layout_margin="4dp" android:text="4" style="@style/Widget.Material3.Button.OutlinedButton"/>
+        <Button android:id="@+id/buttonCopy5" android:layout_width="0dp" android:layout_height="48dp" android:layout_weight="1" android:layout_margin="4dp" android:text="5" style="@style/Widget.Material3.Button.OutlinedButton"/>
+    </LinearLayout>
+</LinearLayout>
