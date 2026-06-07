@@ -22,4 +22,8 @@ interface BarcodeDao {
 
     @Query("DELETE FROM barcode_records")
     suspend fun deleteAll()
+
+    // NEW: Find duplicate record with same barcode, tag type and unit type
+    @Query("SELECT * FROM barcode_records WHERE barcode = :barcode AND tagType = :tagType AND unitType = :unitType LIMIT 1")
+    suspend fun findDuplicate(barcode: String, tagType: String, unitType: String): BarcodeRecord?
 }
