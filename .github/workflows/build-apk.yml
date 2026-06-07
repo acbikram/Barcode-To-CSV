@@ -1,4 +1,4 @@
-name: Build Android APK
+name: Build Android APK (No Wrapper)
 
 on:
   push:
@@ -24,11 +24,11 @@ jobs:
           cmdline-tools-version: 11076708
           accept-android-sdk-licenses: true
 
-      - name: Install Gradle
+      - name: Download and install Gradle 8.2
         run: |
-          sudo apt update
-          sudo apt install -y gradle
-          gradle --version
+          wget https://services.gradle.org/distributions/gradle-8.2-bin.zip
+          unzip -d $HOME gradle-8.2-bin.zip
+          echo "$HOME/gradle-8.2/bin" >> $GITHUB_PATH
 
       - name: Build APK
         run: gradle assembleDebug
