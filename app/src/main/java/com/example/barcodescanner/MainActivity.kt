@@ -29,6 +29,7 @@ import com.example.barcodescanner.databinding.ActivityMainBinding
 import com.example.barcodescanner.scanning.BarcodeAnalyzer
 import com.example.barcodescanner.ui.adapters.RecentScansAdapter
 import com.example.barcodescanner.ui.dialogs.CopiesDialogFragment
+import com.example.barcodescanner.utils.CsvExporter
 import com.example.barcodescanner.utils.PreferencesManager
 import com.example.barcodescanner.viewmodel.MainViewModel
 import kotlinx.coroutines.delay
@@ -69,12 +70,9 @@ class MainActivity : AppCompatActivity() {
         observeRecentScans()
         setupUI()
 
-        // Preload beep sound (place beep.mp3 in res/raw/)
         try {
             mediaPlayer = MediaPlayer.create(this, R.raw.beep)
-        } catch (e: Exception) {
-            // fallback: no beep
-        }
+        } catch (e: Exception) { }
 
         binding.buttonHistory.setOnClickListener { HistoryActivity.start(this) }
         binding.buttonExport.setOnClickListener { exportCSV() }
@@ -235,7 +233,9 @@ class MainActivity : AppCompatActivity() {
                         }
                     }
                     .setNegativeButton("No") { _, _ ->
-                        saveNewRecord(barcode, selectedTag, selectedUnit)
+                        lifecycleScope.launch {
+                            saveNewRecord(barcode, selectedTag, selectedUnit)
+                        }
                     }
                     .setOnDismissListener { isScanningActive = true }
                     .show()
@@ -256,9 +256,11 @@ class MainActivity : AppCompatActivity() {
                 customEng = null,
                 customAra = null
             )
-            viewModel.saveRecord(record)
-            delay(500)
-            isScanningActive = true
+            lifecycleScope.launch {
+                viewModel.saveRecord(record)
+                delay(500)
+                isScanningActive = true
+            }
         }.show(supportFragmentManager, "copies_dialog")
     }
 
