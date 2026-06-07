@@ -4,49 +4,146 @@
     android:layout_width="match_parent"
     android:layout_height="match_parent"
     android:orientation="vertical"
-    android:padding="8dp">
+    android:padding="12dp"
+    android:background="#F5F5F5">
 
+    <!-- Header -->
+    <TextView
+        android:layout_width="match_parent"
+        android:layout_height="wrap_content"
+        android:text="Barcode Scanner Pro"
+        android:textAppearance="?attr/textAppearanceHeadlineSmall"
+        android:gravity="center"
+        android:layout_marginBottom="16dp" />
+
+    <!-- Camera card with smaller preview -->
+    <androidx.cardview.widget.CardView
+        android:layout_width="match_parent"
+        android:layout_height="wrap_content"
+        app:cardCornerRadius="16dp"
+        app:cardElevation="4dp"
+        android:layout_marginBottom="16dp">
+
+        <FrameLayout
+            android:layout_width="match_parent"
+            android:layout_height="280dp"
+            android:background="@android:color/black">
+
+            <androidx.camera.view.PreviewView
+                android:id="@+id/viewFinder"
+                android:layout_width="match_parent"
+                android:layout_height="match_parent"
+                android:visibility="gone" />
+
+            <!-- Glowing scan overlay -->
+            <View
+                android:id="@+id/scanOverlay"
+                android:layout_width="200dp"
+                android:layout_height="200dp"
+                android:layout_gravity="center"
+                android:background="@drawable/scan_overlay_glow"
+                android:visibility="gone" />
+
+            <!-- Start button when camera off -->
+            <Button
+                android:id="@+id/buttonStartScan"
+                android:layout_width="wrap_content"
+                android:layout_height="wrap_content"
+                android:layout_gravity="center"
+                android:text="Start Scanning"
+                android:padding="16dp"
+                style="@style/Widget.Material3.Button.ElevatedButton" />
+
+        </FrameLayout>
+    </androidx.cardview.widget.CardView>
+
+    <!-- Spinners row -->
     <LinearLayout
         android:layout_width="match_parent"
         android:layout_height="wrap_content"
         android:orientation="horizontal"
-        android:weightSum="2">
+        android:weightSum="2"
+        android:layout_marginBottom="16dp">
+
         <com.google.android.material.card.MaterialCardView
             android:layout_width="0dp"
             android:layout_height="wrap_content"
-            android:layout_margin="4dp"
+            android:layout_marginEnd="8dp"
             android:layout_weight="1"
             app:cardElevation="2dp">
-            <LinearLayout android:layout_width="match_parent" android:layout_height="wrap_content" android:orientation="vertical" android:padding="8dp">
-                <TextView android:layout_width="wrap_content" android:layout_height="wrap_content" android:text="Tag Type" android:textAppearance="?attr/textAppearanceLabelMedium"/>
-                <Spinner android:id="@+id/spinnerTagType" android:layout_width="match_parent" android:layout_height="wrap_content"/>
+            <LinearLayout
+                android:layout_width="match_parent"
+                android:layout_height="wrap_content"
+                android:orientation="vertical"
+                android:padding="12dp">
+                <TextView
+                    android:layout_width="wrap_content"
+                    android:layout_height="wrap_content"
+                    android:text="Tag Type"
+                    android:textAppearance="?attr/textAppearanceLabelMedium" />
+                <Spinner android:id="@+id/spinnerTagType" android:layout_width="match_parent" android:layout_height="wrap_content" />
             </LinearLayout>
         </com.google.android.material.card.MaterialCardView>
+
         <com.google.android.material.card.MaterialCardView
             android:layout_width="0dp"
             android:layout_height="wrap_content"
-            android:layout_margin="4dp"
+            android:layout_marginStart="8dp"
             android:layout_weight="1"
             app:cardElevation="2dp">
-            <LinearLayout android:layout_width="match_parent" android:layout_height="wrap_content" android:orientation="vertical" android:padding="8dp">
-                <TextView android:layout_width="wrap_content" android:layout_height="wrap_content" android:text="Unit Type" android:textAppearance="?attr/textAppearanceLabelMedium"/>
-                <Spinner android:id="@+id/spinnerUnitType" android:layout_width="match_parent" android:layout_height="wrap_content"/>
+            <LinearLayout
+                android:layout_width="match_parent"
+                android:layout_height="wrap_content"
+                android:orientation="vertical"
+                android:padding="12dp">
+                <TextView
+                    android:layout_width="wrap_content"
+                    android:layout_height="wrap_content"
+                    android:text="Unit Type"
+                    android:textAppearance="?attr/textAppearanceLabelMedium" />
+                <Spinner android:id="@+id/spinnerUnitType" android:layout_width="match_parent" android:layout_height="wrap_content" />
             </LinearLayout>
         </com.google.android.material.card.MaterialCardView>
     </LinearLayout>
 
-    <androidx.camera.view.PreviewView
-        android:id="@+id/viewFinder"
+    <!-- Action Buttons -->
+    <LinearLayout
+        android:layout_width="match_parent"
+        android:layout_height="wrap_content"
+        android:orientation="horizontal"
+        android:layout_marginBottom="16dp">
+        <Button
+            android:id="@+id/buttonHistory"
+            android:layout_width="0dp"
+            android:layout_height="wrap_content"
+            android:layout_marginEnd="8dp"
+            android:layout_weight="1"
+            android:text="History"
+            style="@style/Widget.Material3.Button.OutlinedButton" />
+        <Button
+            android:id="@+id/buttonExport"
+            android:layout_width="0dp"
+            android:layout_height="wrap_content"
+            android:layout_marginStart="8dp"
+            android:layout_weight="1"
+            android:text="Export"
+            style="@style/Widget.Material3.Button.OutlinedButton" />
+    </LinearLayout>
+
+    <!-- Recent Scans -->
+    <TextView
+        android:layout_width="wrap_content"
+        android:layout_height="wrap_content"
+        android:text="Recent Scans"
+        android:textAppearance="?attr/textAppearanceTitleMedium"
+        android:layout_marginBottom="8dp" />
+
+    <androidx.recyclerview.widget.RecyclerView
+        android:id="@+id/recyclerViewRecentScans"
         android:layout_width="match_parent"
         android:layout_height="0dp"
         android:layout_weight="1"
-        android:layout_margin="4dp"/>
+        android:background="@android:color/white"
+        android:padding="4dp" />
 
-    <LinearLayout android:layout_width="match_parent" android:layout_height="wrap_content" android:orientation="horizontal">
-        <Button android:id="@+id/buttonHistory" android:layout_width="0dp" android:layout_height="wrap_content" android:layout_margin="4dp" android:layout_weight="1" android:text="History"/>
-        <Button android:id="@+id/buttonExport" android:layout_width="0dp" android:layout_height="wrap_content" android:layout_margin="4dp" android:layout_weight="1" android:text="Export"/>
-    </LinearLayout>
-
-    <TextView android:layout_width="wrap_content" android:layout_height="wrap_content" android:layout_marginTop="8dp" android:text="Recent Scans" android:textAppearance="?attr/textAppearanceTitleMedium"/>
-    <androidx.recyclerview.widget.RecyclerView android:id="@+id/recyclerViewRecentScans" android:layout_width="match_parent" android:layout_height="200dp" android:layout_marginTop="4dp"/>
 </LinearLayout>
