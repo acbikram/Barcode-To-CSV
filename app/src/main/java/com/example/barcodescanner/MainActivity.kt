@@ -26,10 +26,11 @@ import com.example.barcodescanner.databinding.ActivityMainBinding
 import com.example.barcodescanner.scanning.BarcodeAnalyzer
 import com.example.barcodescanner.ui.adapters.RecentScansAdapter
 import com.example.barcodescanner.ui.dialogs.CopiesDialogFragment
-import com.example.barcodescanner.utils.PreferencesManager
 import com.example.barcodescanner.utils.CsvExporter
+import com.example.barcodescanner.utils.PreferencesManager
 import com.example.barcodescanner.viewmodel.MainViewModel
 import kotlinx.coroutines.delay
+import kotlinx.coroutines.flow.first
 import kotlinx.coroutines.launch
 import java.util.concurrent.Executors
 
@@ -59,7 +60,7 @@ class MainActivity : AppCompatActivity() {
 
         setupSpinners()
         setupRecyclerView()
-        observeRecentScans()
+        observeRecentScans()  // ✅ Fixed: using Flow collection
         binding.buttonHistory.setOnClickListener { HistoryActivity.start(this) }
         binding.buttonExport.setOnClickListener { exportCSV() }
 
@@ -101,7 +102,12 @@ class MainActivity : AppCompatActivity() {
     }
 
     private fun observeRecentScans() {
-        viewModel.recentScans.observe(this) { records -> recentAdapter.submitList(records) }
+        // ✅ Collect Flow instead of observing LiveData
+        lifecycleScope.launch {
+            viewModel.recentScans.collect { records ->
+                recentAdapter.submitList(records)
+            }
+        }
     }
 
     private fun hasCameraPermission() = ContextCompat.checkSelfPermission(this, Manifest.permission.CAMERA) == PackageManager.PERMISSION_GRANTED
@@ -111,7 +117,9 @@ class MainActivity : AppCompatActivity() {
         cameraProviderFuture.addListener({
             val cameraProvider = cameraProviderFuture.get()
             val preview = Preview.Builder().build().also { it.setSurfaceProvider(binding.viewFinder.surfaceProvider) }
-            val imageAnalysis = ImageAnalysis.Builder().setBackpressureStrategy(ImageAnalysis.STRATEGY_KEEP_ONLY_LATEST).build()
+            val imageAnalysis = ImageAnalysis.Builder()
+                .setBackpressureStrategy(ImageAnalysis.STRATEGY_KEEP_ONLY_LATEST)
+                .build()
             imageAnalysis.setAnalyzer(cameraExecutor, BarcodeAnalyzer { barcode ->
                 if (isScanning) {
                     isScanning = false
@@ -138,8 +146,11 @@ class MainActivity : AppCompatActivity() {
         lifecycleScope.launch {
             viewModel.saveRecord(record)
             val vibrator = getSystemService(VIBRATOR_SERVICE) as Vibrator
-            if (Build.VERSION.SDK_INT >= Build.VERSION_CODES.O) vibrator.vibrate(VibrationEffect.createOneShot(100, VibrationEffect.DEFAULT_AMPLITUDE))
-            else vibrator.vibrate(100)
+            if (Build.VERSION.SDK_INT >= Build.VERSION_CODES.O) {
+                vibrator.vibrate(VibrationEffect.createOneShot(100, VibrationEffect.DEFAULT_AMPLITUDE))
+            } else {
+                vibrator.vibrate(100)
+            }
             delay(500)
             isScanning = true
         }
@@ -147,6 +158,7 @@ class MainActivity : AppCompatActivity() {
 
     private fun exportCSV() {
         lifecycleScope.launch {
+            // ✅ first() is a suspend function from kotlinx.coroutines.flow
             val records = repository.getAllRecords().first()
             CsvExporter.exportToCSV(this@MainActivity, records)
         }
